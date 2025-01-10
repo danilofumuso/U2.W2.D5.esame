@@ -38,8 +38,16 @@ public class ViaggioService {
         return viaggioRepository.save(viaggio);
     }
 
+    public Viaggio changeStato(Long id, Viaggio modifiedViaggio){
+        Viaggio viaggio= findById(id);
+        viaggio.setStatoViaggio(modifiedViaggio.getStatoViaggio());
+        return viaggioRepository.save(viaggio);
+    }
+
     public void deleteViaggio(Long id) {
         viaggioRepository.deleteById(id);
     }
+
+
 
 }

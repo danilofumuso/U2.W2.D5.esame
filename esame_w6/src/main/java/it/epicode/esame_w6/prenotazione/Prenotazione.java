@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@Table(name = "prenotazioni")
 public class Prenotazione {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

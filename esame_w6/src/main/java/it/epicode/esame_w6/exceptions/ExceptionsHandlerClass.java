@@ -19,6 +19,11 @@ public class ExceptionsHandlerClass {
         return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = PrenotazioneNonEffettuabileException.class)
+    protected ResponseEntity<Object> prenotazioneNonEffettuabile(PrenotazioneNonEffettuabileException e) {
+        return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     //TODO
     //da usare per la validazione, notation sugli attributi delle entities tipo @NotBlank,
     //e usare nel service notation @Validated e @Valid per ogni metodo che vuole validazione!

@@ -38,10 +38,17 @@ public class ViaggioController {
         return ResponseEntity.ok(viaggioService.updateViaggio(id, modifiedViaggio));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Viaggio> patchViaggio(@PathVariable Long id, @RequestBody Viaggio modifiedViaggio) {
+        return ResponseEntity.ok(viaggioService.changeStato(id, modifiedViaggio));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteViaggio(@PathVariable Long id) {
         viaggioService.deleteViaggio(id);
         return new ResponseEntity<>("Viaggio eliminato correttamente!",HttpStatus.NO_CONTENT);
     }
+
+
 
 }
