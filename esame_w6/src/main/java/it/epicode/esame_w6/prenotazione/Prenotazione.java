@@ -15,7 +15,7 @@ public class Prenotazione {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "data_prenotazione", nullable = false)
+    @Column(name = "data_prenotazione")
     private LocalDate dataPrenotazione;
 
     @Column(name = "preferenze_dipendente")

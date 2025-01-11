@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class DipendenteController {
     private DipendenteService dipendenteService;
 
     @GetMapping
-    public ResponseEntity<List<Dipendente>> getAllDipendenti(){
+    public ResponseEntity<List<Dipendente>> getAllDipendenti() {
 
         List<Dipendente> dipendenti = dipendenteService.findAll();
 
@@ -23,24 +24,46 @@ public class DipendenteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Dipendente> findDipendenteById(@PathVariable Long id){
+    public ResponseEntity<Dipendente> findDipendenteById(@PathVariable Long id) {
         return ResponseEntity.ok(dipendenteService.findById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<Dipendente> createDipendente(@RequestBody Dipendente dipendente) {
-        return new ResponseEntity<>(dipendenteService.createDipendente(dipendente), HttpStatus.CREATED);
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Dipendente> createDipendente(@RequestParam("username") String username,
+                                                       @RequestParam("nome") String nome,
+                                                       @RequestParam("cognome") String cognome,
+                                                       @RequestParam("email") String email,
+                                                       @RequestParam(value = "fotoProfilo", required = false) MultipartFile file) {
+
+        Dipendente dipendente = new Dipendente();
+        dipendente.setUsername(username);
+        dipendente.setNome(nome);
+        dipendente.setCognome(cognome);
+        dipendente.setEmail(email);
+        return new ResponseEntity<>(dipendenteService.createDipendente(dipendente, file), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Dipendente> updateDipendente(@PathVariable Long id, @RequestBody Dipendente modifiedDipendente) {
-        return ResponseEntity.ok(dipendenteService.updateDipendente(id, modifiedDipendente));
+    @PutMapping(path = "/{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<Dipendente> updateDipendente(@PathVariable Long id,
+                                                       @RequestParam("username") String username,
+                                                       @RequestParam("nome") String nome,
+                                                       @RequestParam("cognome") String cognome,
+                                                       @RequestParam("email") String email,
+                                                       @RequestParam(value = "fotoProfilo", required = false) MultipartFile file) {
+
+        Dipendente dipendente = dipendenteService.findById(id);
+        dipendente.setUsername(username);
+        dipendente.setNome(nome);
+        dipendente.setCognome(cognome);
+        dipendente.setEmail(email);
+
+        return ResponseEntity.ok(dipendenteService.updateDipendente(dipendente, file));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDipendente(@PathVariable Long id) {
         dipendenteService.deleteDipendente(id);
-        return new ResponseEntity<>("Dipendente eliminato correttamente!",HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Dipendente eliminato correttamente!", HttpStatus.NO_CONTENT);
     }
 
 }

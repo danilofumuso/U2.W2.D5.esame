@@ -6,13 +6,16 @@ import it.epicode.esame_w6.exceptions.PrenotazioneNonEffettuabileException;
 import it.epicode.esame_w6.viaggio.Viaggio;
 import it.epicode.esame_w6.viaggio.ViaggioService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Service
+@Validated
 public class PrenotazioneService {
 
     @Autowired
@@ -36,7 +39,7 @@ public class PrenotazioneService {
         return prenotazioneRepository.findById(id).get();
     }
 
-    public Prenotazione createPrenotazione(PrenotazioneDTO prenotazioneDTO) {
+    public Prenotazione createPrenotazione(@Valid PrenotazioneDTO prenotazioneDTO) {
         if (prenotazioneRepository.numeroPrenotazioniGiornata(prenotazioneDTO.getDipendenteId(), prenotazioneDTO.getDataPrenotazione()) > 0) {
             throw new PrenotazioneNonEffettuabileException("Il dipendente ha già effettuato una prenotazione in data odierna!");
         }
@@ -57,7 +60,7 @@ public class PrenotazioneService {
         return prenotazioneRepository.save(prenotazione);
     }
 
-    public Prenotazione updatePrenotazione(Long id, PrenotazioneDTO modifiedPrenotazione) {
+    public Prenotazione updatePrenotazione(Long id, @Valid PrenotazioneDTO modifiedPrenotazione) {
         if (prenotazioneRepository.numeroPrenotazioniGiornata(modifiedPrenotazione.getDipendenteId(), modifiedPrenotazione.getDataPrenotazione()) > 0) {
             throw new PrenotazioneNonEffettuabileException("Il dipendente ha già effettuato una prenotazione in data odierna!");
         }

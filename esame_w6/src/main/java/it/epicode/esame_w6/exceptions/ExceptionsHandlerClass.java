@@ -24,9 +24,11 @@ public class ExceptionsHandlerClass {
         return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    //TODO
-    //da usare per la validazione, notation sugli attributi delle entities tipo @NotBlank,
-    //e usare nel service notation @Validated e @Valid per ogni metodo che vuole validazione!
+    @ExceptionHandler(value = UploadException.class)
+    protected ResponseEntity<Object> uploadException(UploadException e) {
+        return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
         Map<String, String> errors = new HashMap<>();
