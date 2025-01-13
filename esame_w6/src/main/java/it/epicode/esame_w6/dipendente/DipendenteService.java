@@ -3,6 +3,7 @@ package it.epicode.esame_w6.dipendente;
 import it.epicode.esame_w6.cloudinary.CloudinaryService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -32,10 +33,15 @@ public class DipendenteService {
         return dipendenteRepository.findById(id).get();
     }
 
-    public Dipendente createDipendente(@Valid Dipendente dipendente, MultipartFile file) {
+    public Dipendente createDipendente(@Valid DipendenteDTO dipendenteDTO, MultipartFile file) {
+
+        Dipendente dipendente= new Dipendente();
+        BeanUtils.copyProperties(dipendenteDTO,dipendente);
+
         if (file != null && !file.isEmpty()) {
             dipendente.setUrlFotoProfilo(cloudinaryService.uploader(file,"dipendenti").get("url").toString());
         }
+
         return dipendenteRepository.save(dipendente);
     }
 

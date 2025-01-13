@@ -1,5 +1,7 @@
 package it.epicode.esame_w6.dipendente;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +31,18 @@ public class DipendenteController {
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Dipendente> createDipendente(@RequestParam("username") String username,
-                                                       @RequestParam("nome") String nome,
-                                                       @RequestParam("cognome") String cognome,
-                                                       @RequestParam("email") String email,
+    public ResponseEntity<Dipendente> createDipendente(@RequestParam("dipendente") String dipendente,
                                                        @RequestParam(value = "fotoProfilo", required = false) MultipartFile file) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        DipendenteDTO dipendenteDTO;
 
-        Dipendente dipendente = new Dipendente();
-        dipendente.setUsername(username);
-        dipendente.setNome(nome);
-        dipendente.setCognome(cognome);
-        dipendente.setEmail(email);
-        return new ResponseEntity<>(dipendenteService.createDipendente(dipendente, file), HttpStatus.CREATED);
+        try {
+            dipendenteDTO = objectMapper.readValue(dipendente, DipendenteDTO.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new ResponseEntity<>(dipendenteService.createDipendente(dipendenteDTO, file), HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/{id}", consumes = {"multipart/form-data"})

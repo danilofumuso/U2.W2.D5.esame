@@ -14,16 +14,12 @@ public class Dipendente {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @NotBlank(message = "Il campo username non può essere vuoto!")
     private String username;
 
-    @NotBlank(message = "Il campo nome non può essere vuoto!")
     private String nome;
 
-    @NotBlank(message = "Il campo cognome non può essere vuoto!")
     private String cognome;
 
-    @Email(message = "Inserisci un indirizzo email valido!")
     private String email;
 
     @Column(name="url_foto_profilo")
